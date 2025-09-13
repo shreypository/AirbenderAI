@@ -2,9 +2,19 @@ import pickle
 import streamlit as st
 import pandas as pd
 
-# Load the model
-with open('lilo_model.sav', 'rb') as f:
-    model = pickle.load(f)
+import streamlit as st, pandas as pd, pickle
+try:
+    import xgboost  # noqa: F401
+except Exception as e:
+    st.error(f"XGBoost import failed: {e}")
+    st.stop()
+
+@st.cache_resource
+def load_model():
+    with open('lilo_model.sav', 'rb') as f:
+        return pickle.load(f)
+
+model = load_model()
 
 # Define the title and description
 st.title('Wind Turbine Power Prediction Web Application')
